@@ -1,6 +1,8 @@
-<p>contactform works!</p>
+<p style="color: green">Contactform works!</p>
+
 <div class="container">
-  <form (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
+    <!-- Name -->
     <label for="name">Name</label>
     <input
       [(ngModel)]="contactData.name"
@@ -8,26 +10,45 @@
       id="name"
       name="name"
       placeholder="Your name.."
+      required
     />
 
+    <!-- Email -->
     <label for="email">Email</label>
     <input
+      #email="ngModel"
       [(ngModel)]="contactData.email"
       type="email"
       id="email"
       name="email"
-      placeholder="Your mail adress.."
+      placeholder="Your email address.."
+      required
+      pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
     />
+    <!-- Error message for invalid email field -->
+    <span *ngIf="!email.valid && email.touched" style="color: red">
+      Please enter a valid email address.
+    </span>
 
-    <label for="message">Subject</label>
+    <!-- Message -->
+    <label for="message">Message</label>
     <textarea
+      #message="ngModel"
       [(ngModel)]="contactData.message"
       id="message"
       name="message"
       placeholder="Write something.."
       style="height: 200px"
+      minlength="4"
+      required
     ></textarea>
 
-    <input type="submit" value="Submit" />
+    <!-- Error message for invalid message field -->
+    <span *ngIf="!message.valid && message.touched" style="color: red">
+      Please enter a valid message (at least 4 characters).
+    </span>
+
+    <!-- Submit Button -->
+    <input type="submit" value="Submit" [disabled]="!contactForm.form.valid" />
   </form>
 </div>
